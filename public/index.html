@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plateforme de Mini-Jeux Multijoueurs</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="lobby-screen" class="screen active">
+            <div class="lobby-container">
+                <h1>🎮 Mini-Jeux Multijoueurs</h1>
+                <div id="room-info">
+                    <h2>Room: <span id="room-id"></span></h2>
+                    <p>Partagez ce lien pour inviter un ami</p>
+                    <div class="link-box">
+                        <input type="text" id="room-link" readonly>
+                        <button onclick="copyRoomLink()">Copier</button>
+                    </div>
+                </div>
+                <div id="players-list">
+                    <h3>Joueurs dans la salle:</h3>
+                    <ul id="players"></ul>
+                </div>
+                <div id="waiting-message">
+                    En attente d'un deuxième joueur...
+                </div>
+                <div class="player-name-input">
+                    <input type="text" id="player-name" placeholder="Votre nom">
+                    <button onclick="setPlayerName()">Confirmer</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="game-select-screen" class="screen">
+            <div class="game-select-container">
+                <h2>Choisissez un jeu</h2>
+                <p id="selection-info">Le premier joueur qui choisit détermine le jeu</p>
+                <div class="game-cards">
+                    <div class="game-card" onclick="selectGame('war')">
+                        <h3>⚔️ Guerre</h3>
+                        <p>Stratégie et combat</p>
+                    </div>
+                    <div class="game-card" onclick="selectGame('maze')">
+                        <h3>🌀 Labyrinthe</h3>
+                        <p>Course contre la montre</p>
+                    </div>
+                    <div class="game-card" onclick="selectGame('crossword')">
+                        <h3>📝 Mots Croisés</h3>
+                        <p>Réflexion et rapidité</p>
+                    </div>
+                    <div class="game-card" onclick="selectGame('tournament')">
+                        <h3>🏆 Tournoi</h3>
+                        <p>Tous les jeux en un</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <div id="game-header">
+                <div id="game-timer">00:00</div>
+                <div id="scores">
+                    <div id="player1-score">Joueur 1: 0</div>
+                    <div id="player2-score">Joueur 2: 0</div>
+                </div>
+                <button onclick="leaveGame()">Quitter</button>
+            </div>
+            <div id="game-container"></div>
+        </div>
+
+        <div id="game-over-screen" class="screen">
+            <div class="game-over-container">
+                <h2>Partie terminée!</h2>
+                <div id="final-scores"></div>
+                <div id="winner-announcement"></div>
+                <button onclick="backToLobby()">Retour au lobby</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="main.js"></script>
+    <script src="war.js"></script>
+    <script src="maze.js"></script>
+    <script src="crossword.js"></script>
+</body>
+</html>
