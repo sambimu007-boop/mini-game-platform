@@ -198,3 +198,44 @@ socket.on('game-started', () => {
 socket.on('game-over', () => {
     clearInterval(timerInterval);
 });
+// Variables globales pour l'audio
+let audioClient = null;
+
+// Fonction pour activer/désactiver l'audio
+function toggleAudio() {
+    if (!audioClient) {
+        audioClient = new AudioClient(currentRoom, currentPlayer.name, socket);
+        audioClient.initialize().then(success => {
+            if (success) {
+                document.getElementById('audio-toggle').classList.remove('muted');
+                document.getElementById('audio-status').textContent = 'Appel actif';
+            }
+        });
+    } else {
+        if (audioClient.stream?.getAudioTracks()[0]?.enabled) {
+            audioClient.mute();
+            document.getElementById('audio-toggle').classList.add('muted');
+            document.getElementById('audio-status').textContent = 'Micro coupé';
+        } else {
+            audioClient.unmute();
+            document.getElementById('audio-toggle').classList.remove('muted');
+            document.getElementById('audio-status').textContent = 'Appel actif';
+        }
+    }
+}
+
+// Modifier la fonction leaveGame pour nettoyer l'audio
+const originalLeaveGame = leaveGame;
+leaveGame = function() {
+    if (audioClient) {
+        audioClient.cleanup();
+        audioClient = null;
+    }
+    originalLeaveGame();
+};
+
+// Écouter le début de l'appel
+socket.on('audio:call-started', () => {
+    document.getElementById('audio-status').textContent = 'Appel actif';
+    document.getElementById('audio-toggle').style.display = 'block';
+});

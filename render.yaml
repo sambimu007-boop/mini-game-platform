@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: mini-game-platform
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: STUN_SERVER
+        value: stun:stun.l.google.com:19302
+    healthCheckPath: /
+    autoDeploy: true

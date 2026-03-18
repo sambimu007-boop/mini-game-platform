@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Plateforme de Jeux</title>
+    <link rel="stylesheet" href="admin.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>⚙️ Administration des Jeux Multijoueurs</h1>
+            <div class="admin-actions">
+                <span id="admin-name"></span>
+                <button onclick="logout()" class="btn-logout">🚪 Déconnexion</button>
+            </div>
+        </header>
+
+        <div class="admin-dashboard">
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <h3>Joueurs inscrits</h3>
+                        <p id="total-users">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏠</div>
+                    <div class="stat-info">
+                        <h3>Rooms Actives</h3>
+                        <p id="active-rooms">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🟢</div>
+                    <div class="stat-info">
+                        <h3>Connectés</h3>
+                        <p id="connected-players">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎮</div>
+                    <div class="stat-info">
+                        <h3>Parties en cours</h3>
+                        <p id="games-in-progress">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h2>➕ Créer un nouveau joueur</h2>
+                <div class="create-player-form">
+                    <input type="text" id="new-username" placeholder="Nom d'utilisateur" class="admin-input">
+                    <input type="password" id="new-password" placeholder="Mot de passe" class="admin-input">
+                    <button onclick="createPlayer()" class="btn-primary">Créer le joueur</button>
+                </div>
+                <div id="create-result" class="result-message"></div>
+            </div>
+
+            <div class="admin-section">
+                <h2>📋 Liste des joueurs</h2>
+                <div class="table-container">
+                    <table class="players-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Rôle</th>
+                                <th>Room</th>
+                                <th>Parties</th>
+                                <th>Victoires</th>
+                                <th>Score</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="players-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h2>🏠 Rooms actives en temps réel</h2>
+                <div class="rooms-grid" id="active-rooms-list"></div>
+            </div>
+
+            <div class="admin-section">
+                <h2>👁️ Écouter une room (spectateur)</h2>
+                <div class="spectate-form">
+                    <select id="room-select" class="admin-input"></select>
+                    <button onclick="startSpectating()" class="btn-primary">Commencer à écouter</button>
+                    <button onclick="stopSpectating()" class="btn-secondary">Arrêter</button>
+                </div>
+                <div id="spectate-log" class="spectate-log"></div>
+            </div>
+
+            <div class="admin-section">
+                <h2>📊 Statistiques avancées</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h4>Joueurs par room</h4>
+                        <canvas id="rooms-chart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

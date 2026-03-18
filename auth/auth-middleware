@@ -1,0 +1,71 @@
+const dbManager = require('../database/db-manager');
+
+class AuthMiddleware {
+    constructor() {
+        this.sessions = new Map();
+    }
+
+    requireAuth(req, res, next) {
+        const token = req.cookies?.sessionToken || req.headers.authorization;
+        
+        if (!token) {
+            return res.redirect('/login.html');
+        }
+
+        const session = this.sessions.get(token);
+        if (!session || session.expires < Date.now()) {
+            res.clearCookie('sessionToken');
+            return res.redirect('/login.html');
+        }
+
+        req.user = session.user;
+        next();
+    }
+
+    createSession(user) {
+        const token = this.generateToken();
+        const session = {
+            user: {
+                username: user.username,
+                room: user.room,
+                role: user.role
+            },
+            expires: Date.now() + 7 * 24 * 60 * 60 * 1000
+        };
+
+        this.sessions.set(token, session);
+        return token;
+    }
+
+    destroySession(token) {
+        this.sessions.delete(token);
+    }
+
+    generateToken() {
+        return 'sess_' + Math.random().toString(36).substring(2, 15) + 
+               Math.random().toString(36).substring(2, 15);
+    }
+
+    checkRoomAccess(socket, next) {
+        const token = socket.handshake.auth.token;
+        
+        if (!token) {
+            return next(new Error('Non authentifié'));
+        }
+
+        const session = this.sessions.get(token);
+        if (!session || session.expires < Date.now()) {
+            return next(new Error('Session expirée'));
+        }
+
+        socket.user = session.user;
+        next();
+    }
+
+    isAdmin(token) {
+        const session = this.sessions.get(token);
+        return session?.user?.role === 'admin';
+    }
+}
+
+module.exports = new AuthMiddleware();
