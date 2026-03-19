@@ -1,28 +1,4 @@
 {
-  "users": [
-    {
-      "username": "admin",
-      "password": "$2b$10$YourHashedAdminPasswordHere",
-      "role": "admin",
-      "room": null,
-      "createdAt": "2024-01-01T00:00:00.000Z",
-      "stats": {
-        "gamesPlayed": 0,
-        "wins": 0,
-        "totalScore": 0
-      }
-    },
-    {
-      "username": "player1",
-      "password": "$2b$10$YourHashedPasswordHere",
-      "role": "player",
-      "room": "room_4821",
-      "createdAt": "2024-01-01T00:00:00.000Z",
-      "stats": {
-        "gamesPlayed": 5,
-        "wins": 2,
-        "totalScore": 1250
-      }
-    }
-  ]
+  "users": []
 }
+```
