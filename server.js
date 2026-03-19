@@ -27,6 +27,11 @@ app.use(cookieParser());
 app.use('/', authRoutes);
 app.use('/', adminRoutes);
 
+const inviteRoute = require('./admin/invite-route');
+const setupRoute = require('./admin/setup-route');
+app.use('/', inviteRoute);
+app.use('/', setupRoute);
+
 // Stocker l'instance io
 app.set('io', io);
 
