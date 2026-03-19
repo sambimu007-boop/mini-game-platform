@@ -1,4 +1,17 @@
-const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const dbPath = path.join(__dirname, 'database', 'users.json');
+if (!fs.existsSync(dbPath) || JSON.parse(fs.readFileSync(dbPath)).users.some(u => u.password === '$2b$10$YourHashedAdminPasswordHere')) {
+    fs.writeFileSync(dbPath, JSON.stringify({ users: [] }, null, 2));
+}
+```
+
+Ça détecte si le fichier contient encore les faux mots de passe d'exemple et le vide automatiquement au démarrage.
+
+Commit :
+```
+Modification de server.js pour forcer la réinitialisation du users.json d'exemple au démarrageconst express = require('express');
+
 const http = require('http');
 const socketIO = require('socket.io');
 const path = require('path');
